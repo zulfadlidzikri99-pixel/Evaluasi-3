@@ -1,0 +1,77 @@
+Penjelasan Program DHT11 pada Arduino Uno
+Program ini digunakan untuk membaca suhu dan kelembapan udara dari sensor DHT11, kemudian menampilkan hasilnya pada Serial Monitor di Arduino IDE.
+1. Memanggil Library
+#include <DHT.h>
+Baris ini digunakan untuk memanggil library DHT yang berisi fungsi-fungsi untuk berkomunikasi dengan sensor DHT11.
+________________________________________
+2. Mendefinisikan Pin dan Tipe Sensor
+#define DHTPIN 2
+#define DHTTYPE DHT11
+•	DHTPIN 2 berarti pin data sensor DHT11 terhubung ke pin digital 2 Arduino.
+•	DHTTYPE DHT11 menunjukkan bahwa sensor yang digunakan adalah DHT11.
+________________________________________
+3. Membuat Objek Sensor
+DHT dht(DHTPIN, DHTTYPE);
+Objek dht dibuat agar program dapat menggunakan fungsi-fungsi dari library DHT untuk membaca data sensor.
+________________________________________
+4. Fungsi Setup
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+
+  Serial.println("Membaca Sensor DHT11...");
+}
+Fungsi setup() dijalankan satu kali saat Arduino dinyalakan.
+Penjelasan:
+•	Serial.begin(9600); mengaktifkan komunikasi serial dengan kecepatan 9600 bps.
+•	dht.begin(); menginisialisasi sensor DHT11.
+•	Serial.println(); menampilkan pesan awal pada Serial Monitor.
+________________________________________
+5. Membaca Data Sensor
+float humidity = dht.readHumidity();
+float temperature = dht.readTemperature();
+Perintah ini digunakan untuk membaca:
+•	humidity = nilai kelembapan udara (%)
+•	temperature = nilai suhu (°C)
+Tipe data float digunakan karena hasil pembacaan dapat berupa angka desimal.
+________________________________________
+6. Memeriksa Kegagalan Pembacaan
+if (isnan(humidity) || isnan(temperature)) {
+  Serial.println("Gagal membaca sensor DHT11!");
+  delay(2000);
+  return;
+}
+Jika sensor gagal mengirim data, nilai yang diterima akan dianggap tidak valid (NaN = Not a Number).
+Program akan:
+1.	Menampilkan pesan kesalahan.
+2.	Menunggu 2 detik.
+3.	Kembali membaca sensor.
+________________________________________
+7. Menampilkan Hasil Pembacaan
+Serial.print("Suhu: ");
+Serial.print(temperature);
+Serial.print(" °C");
+
+Serial.print(" | Kelembapan: ");
+Serial.print(humidity);
+Serial.println(" %");
+Bagian ini menampilkan hasil pembacaan sensor pada Serial Monitor.
+Contoh hasil:
+Suhu: 29.00 °C | Kelembapan: 72.00 %
+________________________________________
+8. Delay Pembacaan
+delay(2000);
+Program menunggu selama 2 detik sebelum melakukan pembacaan berikutnya.
+Hal ini dilakukan karena DHT11 tidak dirancang untuk membaca data terlalu cepat.
+________________________________________
+Alur Kerja Program
+1.	Arduino menyala.
+2.	Sensor DHT11 diinisialisasi.
+3.	Arduino membaca suhu dan kelembapan.
+4.	Data diperiksa apakah valid atau tidak.
+5.	Jika valid, data ditampilkan pada Serial Monitor.
+6.	Menunggu 2 detik.
+7.	Mengulangi proses pembacaan terus-menerus.
+Kesimpulan
+Program ini memanfaatkan sensor DHT11 untuk mengukur kondisi lingkungan berupa suhu dan kelembapan udara. Data yang diperoleh kemudian dikirim ke Serial Monitor sehingga pengguna dapat memantau perubahan suhu dan kelembapan secara real-time menggunakan Arduino Uno.
+
